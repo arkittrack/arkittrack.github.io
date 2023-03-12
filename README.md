@@ -1,6 +1,6 @@
 # ARKitTrack
 
-This is the repository that contains source code for the [ARKitTrack website](https://arkittrack.io).
+This is the repository that contains source code for the [ARKitTrack website](https://arkittrack.github.io).
 
 If you find ARKitTrack useful for your work please cite:
 ```
