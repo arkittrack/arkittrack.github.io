@@ -122,9 +122,14 @@
       <figure>
         <img src="./static/images/data_vis.jpg" alt="light_and_fark"  style="width:100%">
       </figure>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">ARKitTrack</span> tracks and segments target objects with your mobile phone RGB-D data.
-      </h2>
+      <div class="content has-text-justified">
+        <p>
+        <b>Figure 1. Samples from <span class="dnerf">ARKitTrack</span>.</b> We capture both indoor and outdoor sequences (1st row) in many scenes,
+        including zoo, market, office, square, corridor, etc. Lots of scenarios are presented in our dataset,
+        e.g., low or high light conditions (2nd row), surrounding clutter (3rd row), out-of-plane rotation,
+        motion blur, deformation, etc. (4th row). Besides, we annotate each frame with object masks.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -201,7 +206,7 @@
             by consumer-grade LiDAR scanners equipped on Apple’s iPhone and iPad.
           </p>
           <p>
-             ARKitTrack contains 300 RGB-D sequences, 455 targets, and 229.7K video frames in total.
+             <span class="dnerf">ARKitTrack</span> contains 300 RGB-D sequences, 455 targets, and 229.7K video frames in total.
             Along with the bounding box annotations and frame-level attributes,
             we also annotate this dataset with 123.9K pixel-level target masks. Besides,
             the camera intrinsic and camera pose of each frame are provided for future developments.
@@ -210,7 +215,7 @@
             which integrates RGB features with bird’s-eye-view representations to better explore cross-modality 3D geometry.
           </p>
           <p>
-            In-depth empirical analysis has verified that the <span class="ARKitTrack">ARKitTrack</span> dataset
+            In-depth empirical analysis has verified that the <span class="dnerf">ARKitTrack</span> dataset
             can significantly facilitate RGB-D tracking and that
             the proposed baseline method compares favorably against the state of the arts.
           </p>
@@ -232,6 +237,153 @@
 <!--    &lt;!&ndash;/ Paper video. &ndash;&gt;-->
 <!--  </div>-->
 <!--</section>-->
+<section class="section">
+  <div class="container is-max-widescreen">
+    <div class="rows">
+      <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Pipeline</h2>
+        </br>
+        <img src="./static/images/pipeline.jpg" class="interpolation-image"
+         alt="Interpolate start reference image." />
+        </br>
+        </br>
+        <div class="content has-text-justified">
+          <p>
+            <b>Figure 2. Overview the proposed unified RGB-D tracking pipeline in both box-level (VOT) and pixel-level (VOS).</b>
+          </p>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            The procedure of our method is as follows.
+            We first use the ViT model to extract image feature map <b>I</b>,
+            which is further projected into the 3D space to generate the BEV feature map  <b>B</b>
+            according to the input depth, pixel coordinate and camera intrinsic.
+            The BEV feature is processed in the pillar format using BEV pooling and conv layers.
+            The processed BEV feature is back-projected to the 2D image space, producing  <b>I_BEV</b>.
+            The image feature  <b>I</b> and BEV feature <b>I_BEV</b> are fused via
+            concatenation and conv layers to produce the final feature map.
+            The image-BEV cross-view (re-)projection mainly follows LSS.
+            Our framework can be applied to both RGBD VOT and VOS, yielding superior performance even with naive output heads.
+            More details could be found in our CVPR2023 paper.
+          </p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-widescreen">
+    <div class="rows">
+      <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Experiments</h2>
+        <div class="content has-text-justified">
+        </div>
+        </br>
+        <img src="./static/images/vot_results.jpg" class="interpolation-image"
+         alt="Interpolate start reference image." />
+        </br>
+        </br>
+        <div class="content has-text-justified">
+          <p>
+            <b>Table 1. Comparisons with SoTA VOT methods on ARKitTrack test set and existing popular RGB-D benchmarks, including DepthTrack and CDTB. </b>
+            For all trackers, the overall performance on our dataset is always lower than that on DepthTrack and CDTB.
+            It confirms that the proposed ARKitTrack is more challenging than the existing RGB-D tracking datasets.
+            Our tracker performs better than other trackers on both ARKitTrack and DepthTrack,
+            achieving 0.478 and 0.612 F-score, respectively.
+            Although CDTB does not provide a training set and our tracker cannot gain from model learning on this dataset,
+            our method still achieves satisfactory performance. 0.677 F-score can be achieved by training with ARKitTrack,
+            and 0.690 F-score is achieved by training with DepthTrack.
+          </p>
+        </div>
+
+        <div class="content has-text-justified">
+        </div>
+        </br>
+        <img src="static/images/vos_results.jpg" class="interpolation-image"
+         alt="Interpolate start reference image." />
+        </br>
+        </br>
+        <div class="content has-text-justified">
+          <p>
+            <b>Table 2. Comparisons with SoTA VOS methods on ARKitTrack test set.</b>
+            Since there is no existing RGB-D VOS method and dataset, we select 4 state-of-the-art
+            RGB VOS methods for comparison on the ARKitTrack-VOS test set.
+            Besides, We design a variant named STCN_RGBD for RGB-D VOS by adding
+            an additional depth branch to STCN and fusing RGBD features through concatenation.
+            For a fair comparison, all methods are retrained on ARKitTrack-VOS train set without static image pre-training.
+          </p>
+        </div>
+
+        <div class="content has-text-justified">
+        </div>
+        </br>
+        <img src="static/images/vot_attribute_analysis.jpg" class="interpolation-image"
+         alt="Interpolate start reference image."/>
+        </br>
+        </br>
+        <div class="content has-text-justified">
+          <p>
+            <b>Figure 3. Attribute-specific analysis on the VOT test set.</b>
+            We also conduct an attribute-specific analysis for the aforementioned RGB-D VOT trackers
+            by using our per-frame attributes annotation.
+            It shows that our tracker performs better than other RGB-D trackers on 10 attributes.
+            Besides, DeT outperforms other trackers on the full-occlusion attribute.
+            All trackers can deliver satisfactory performance on the extreme-illumination factor.
+            However, none of them can well address the fast-motion and out-of-view attributes,
+            indicating these attributes are more challenging for existing RGB and RGB-D trackers.
+          </p>
+        </div>
+
+        <div class="content has-text-justified">
+        </div>
+        </br>
+        <img src="static/images/vot_abalations.jpg" class="interpolation-image"
+         alt="Interpolate start reference image." />
+        </br>
+        </br>
+        <div class="content has-text-justified">
+          <p>
+            <b>Table 3. The ablation analysis of our VOT method on the ARKitTrack test set and DepthTrack test set.</b>
+            Our tracker is trained with their respective training sets and tested on their respective test sets.
+            The basic tracker is OSTrack, which is trained with only the common RGB tracking datasets.
+            <b>FT, BEV, CV, GD</b> stands for Fine-tuning, BEV space, Cross views and Gaussian distribution.
+            More details could be found in our paper.
+          </p>
+        </div>
+
+        <div class="content has-text-justified">
+        </div>
+        </br>
+        <img src="static/images/vos_abalations.jpg" class="interpolation-image"
+         alt="Interpolate start reference image." />
+        </br>
+        </br>
+        <div class="content has-text-justified">
+          <p>
+            <b>Table 4. Comparison with different memorizing strategies.</b>
+            We also explore different memory update strategies for VOS.
+            <b>ONE:</b> Keep only one template and update it every N frames.
+            <b>IP:</b> Using the IoU prediction branch to control the template update.
+            <b>ADD:</b> Consecutively add new templates to the memory bank and maintain several templates for prediction.
+            More details could be found in our paper.
+          </p>
+        </div>
+
+
+      </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+
+
 
 
 <section class="section" id="BibTeX">
